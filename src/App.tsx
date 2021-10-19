@@ -3,49 +3,27 @@ import { addTodo, Todo, toggleTodo } from "./Todo";
 import { AddTodoForm } from "./AddTodoForm";
 import { TodoItem } from "./TodoItem";
 
-interface AppState {
-  todos: Todo[];
-}
+export const App = () => {
+  const [todos, setTodos] = React.useState<Todo[]>([]);
 
-type AppProps = unknown;
+  const handleSubmit = (newTodoTitle: string) =>
+    setTodos(addTodo(todos, newTodoTitle));
 
-export class App extends React.Component<AppProps, AppState> {
-  state: AppState = {
-    todos: [],
-  };
-
-  constructor(props: AppProps) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.toggleTodo = this.toggleTodo.bind(this);
-  }
-
-  render() {
-    return (
-      <main>
-        <ol>
-          {this.state.todos.map((todo) => (
-            <li key={todo.id}>
-              <TodoItem todo={todo} onToggled={this.toggleTodo} />
-            </li>
-          ))}
-        </ol>
-        <AddTodoForm onNewTodo={this.handleSubmit} />
-      </main>
+  const toggle = (todoId: string) =>
+    setTodos(
+      todos.map((todo) => (todo.id === todoId ? toggleTodo(todo) : todo))
     );
-  }
 
-  private handleSubmit(newTodoTitle: string) {
-    this.setState({
-      todos: addTodo(this.state.todos, newTodoTitle),
-    });
-  }
-
-  private toggleTodo(todoId: string) {
-    this.setState({
-      todos: this.state.todos.map((todo) =>
-        todo.id === todoId ? toggleTodo(todo) : todo
-      ),
-    });
-  }
-}
+  return (
+    <main>
+      <ol>
+        {todos.map((todo) => (
+          <li key={todo.id}>
+            <TodoItem todo={todo} onToggled={toggle} />
+          </li>
+        ))}
+      </ol>
+      <AddTodoForm onNewTodo={handleSubmit} />
+    </main>
+  );
+};
