@@ -1,16 +1,15 @@
 import * as React from "react";
 import { addTodo, Todo, toggleTodo } from "./Todo";
+import { AddTodoForm } from "./AddTodoForm";
 
 interface AppState {
   todos: Todo[];
-  inputValue: string;
 }
 
 type AppProps = unknown;
 
 export class App extends React.Component<AppProps, AppState> {
   state: AppState = {
-    inputValue: "",
     todos: [],
   };
 
@@ -35,25 +34,14 @@ export class App extends React.Component<AppProps, AppState> {
             </li>
           ))}
         </ol>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="new-todo">Add a new todo</label>
-          <input
-            type="text"
-            id="new-todo"
-            value={this.state.inputValue}
-            onChange={(e) => this.setState({ inputValue: e.target.value })}
-          />
-          <button>Add</button>
-        </form>
+        <AddTodoForm onNewTodo={this.handleSubmit} />
       </main>
     );
   }
 
-  private handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  private handleSubmit(newTodoTitle: string) {
     this.setState({
-      todos: addTodo(this.state.todos, this.state.inputValue),
-      inputValue: "",
+      todos: addTodo(this.state.todos, newTodoTitle),
     });
   }
 
