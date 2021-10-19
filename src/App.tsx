@@ -1,6 +1,7 @@
 import * as React from "react";
 import { addTodo, Todo, toggleTodo } from "./Todo";
 import { AddTodoForm } from "./AddTodoForm";
+import { TodoItem } from "./TodoItem";
 
 interface AppState {
   todos: Todo[];
@@ -16,6 +17,7 @@ export class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.toggleTodo = this.toggleTodo.bind(this);
   }
 
   render() {
@@ -24,13 +26,7 @@ export class App extends React.Component<AppProps, AppState> {
         <ol>
           {this.state.todos.map((todo) => (
             <li key={todo.id}>
-              <input
-                type="checkbox"
-                id={todo.id}
-                checked={todo.checked}
-                onChange={() => this.toggleTodo(todo)}
-              />{" "}
-              <label htmlFor={todo.id}>{todo.title}</label>
+              <TodoItem todo={todo} onToggled={this.toggleTodo} />
             </li>
           ))}
         </ol>
@@ -45,10 +41,10 @@ export class App extends React.Component<AppProps, AppState> {
     });
   }
 
-  private toggleTodo(toggledTodo: Todo) {
+  private toggleTodo(todoId: string) {
     this.setState({
       todos: this.state.todos.map((todo) =>
-        todo.id === toggledTodo.id ? toggleTodo(toggledTodo) : todo
+        todo.id === todoId ? toggleTodo(todo) : todo
       ),
     });
   }
