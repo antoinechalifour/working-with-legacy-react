@@ -1,10 +1,5 @@
 import * as React from "react";
-
-interface Todo {
-  id: string;
-  checked: boolean;
-  title: string;
-}
+import { addTodo, Todo, toggleTodo } from "./Todo";
 
 interface AppState {
   todos: Todo[];
@@ -57,14 +52,7 @@ export class App extends React.Component<AppProps, AppState> {
   private handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     this.setState({
-      todos: [
-        ...this.state.todos,
-        {
-          id: Date.now().toString(),
-          checked: false,
-          title: this.state.inputValue,
-        },
-      ],
+      todos: addTodo(this.state.todos, this.state.inputValue),
       inputValue: "",
     });
   }
@@ -72,12 +60,7 @@ export class App extends React.Component<AppProps, AppState> {
   private toggleTodo(toggledTodo: Todo) {
     this.setState({
       todos: this.state.todos.map((todo) =>
-        todo.id === toggledTodo.id
-          ? {
-              ...toggledTodo,
-              checked: !toggledTodo.checked,
-            }
-          : todo
+        todo.id === toggledTodo.id ? toggleTodo(toggledTodo) : todo
       ),
     });
   }

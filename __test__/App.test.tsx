@@ -22,7 +22,8 @@ describe("<App /> tests de caractérisation", function () {
     app
       .givenATodoList("Buy bread", "Buy milk")
       .whenTodoIsToggled("Buy milk")
-      .thenTheyAppearChecked("Buy milk");
+      .thenTheyAppearChecked("Buy milk")
+      .thenTheyAppearUnchecked("Buy bread");
   });
 });
 
